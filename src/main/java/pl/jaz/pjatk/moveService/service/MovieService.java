@@ -11,14 +11,14 @@ import java.util.List;
 @Service
 public class MovieService {
 
-public final MovieRepository movieRepository;
+    public final MovieRepository movieRepository;
 
     public MovieService(MovieRepository movieRepository) {
         this.movieRepository = movieRepository;
     }
 
     public Movie getMovieById(Long id) {
-        return movieRepository.findById(id).orElseThrow(()-> new MovieNotFound());
+        return movieRepository.findById(id).orElseThrow(MovieNotFound::new);
     }
 
     public List<Movie> getAllMovies() {
@@ -41,6 +41,12 @@ public final MovieRepository movieRepository;
             movieToUpdate.setRated(movie.getRated());
         }
         return saveMovie(movieToUpdate);
+    }
+
+    public void isAvailable(Long id) {
+        Movie movie = getMovieById(id);
+        movie.setAvailable(true);
+        saveMovie(movie);
     }
 
     public void deleteMovie(Long id) {
